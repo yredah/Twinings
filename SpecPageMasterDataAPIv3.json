@@ -1,0 +1,1833 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "PDM REST API",
+    "description": "REST Web Services for PDM\r\n\r\nThis page provides an overview of available and documented PDM API endpoints, which are grouped by tags.\r\nEach tag provides a collection of endpoints that are intended for a specific area of the PDM.",
+    "contact": {
+      "name": "Specpage support",
+      "email": "support@specpage.com"
+    },
+    "version": "v1"
+  },
+  "basePath": "/pdm_api/444a9e0d",
+  "host": "integration.specpage.com:8443",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "Base"
+        ],
+        "summary": "Only to check if the Rest End point works",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/masterdata/externalId/{externalId}": {
+      "get": {
+        "tags": [
+          "MasterData"
+        ],
+        "summary": "Find master data by external system (ERP) ID",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "externalId",
+            "description": "external ID (ERP. No) of master data to return",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/MasterData"
+            }
+          },
+          "404": {
+            "description": "master data not found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "500": {
+            "description": "unhandled exception",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/masterdata/filter": {
+      "get": {
+        "tags": [
+          "MasterData"
+        ],
+        "summary": "Provides a list of master data fullfilling the filter criteria",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "Name",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "Type",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "Area",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "ControlStatus",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "Factory",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "no master data are meeting requirements",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "500": {
+            "description": "unhandled exception",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/masterdata/filterItemDefinitions": {
+      "get": {
+        "tags": [
+          "MasterData"
+        ],
+        "summary": "Provides a list of item definitions of master data fullfilling the filter criteria",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "Name",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "Type",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "Area",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "ControlStatus",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "Factory",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ItemDefinition"
+              }
+            }
+          },
+          "404": {
+            "description": "no master data are meeting requirements",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "500": {
+            "description": "unhandled exception",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/masterdata/externalFormatXml": {
+      "post": {
+        "tags": [
+          "MasterData"
+        ],
+        "summary": "Add a new master data",
+        "consumes": [
+          "application/xml"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "master data in xml with inner structure as agreed (multiple formats supported)",
+            "schema": {
+              "type": "array",
+              "items": { }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "master data created",
+            "schema": {
+              "$ref": "#/definitions/ResponseWithObject"
+            }
+          },
+          "400": {
+            "description": "invalid xml supplied",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "409": {
+            "description": "master data already exists",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "500": {
+            "description": "unhandled exception",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "MasterData"
+        ],
+        "summary": "Update an existing master data (creating new master data possible if internal conditions fullfilled)",
+        "consumes": [
+          "application/xml"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "master data in xml with inner structure as agreed (multiple formats supported)",
+            "schema": {
+              "type": "array",
+              "items": { }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "master data updated",
+            "schema": {
+              "$ref": "#/definitions/ResponseWithObject"
+            }
+          },
+          "201": {
+            "description": "master data created",
+            "schema": {
+              "$ref": "#/definitions/ResponseWithObject"
+            }
+          },
+          "400": {
+            "description": "invalid xml supplied",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "404": {
+            "description": "master data not found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "500": {
+            "description": "unhandled exception",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/masterdata": {
+      "post": {
+        "tags": [
+          "MasterData"
+        ],
+        "summary": "Add a new master data",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "master data in specpage json format",
+            "schema": { }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "master data created",
+            "schema": {
+              "$ref": "#/definitions/ResponseWithObject"
+            }
+          },
+          "400": {
+            "description": "invalid json supplied",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "409": {
+            "description": "master data already exists",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "500": {
+            "description": "unhandled exception",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "MasterData"
+        ],
+        "summary": "Update an existing master data (creating new master data possible if internal conditions fullfilled)",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "master data in specpage json format",
+            "schema": { }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "master data updated",
+            "schema": {
+              "$ref": "#/definitions/ResponseWithObject"
+            }
+          },
+          "201": {
+            "description": "master data created",
+            "schema": {
+              "$ref": "#/definitions/ResponseWithObject"
+            }
+          },
+          "400": {
+            "description": "invalid json supplied",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "404": {
+            "description": "master data not found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "500": {
+            "description": "unhandled exception",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/partner/externalId/{externalId}": {
+      "get": {
+        "tags": [
+          "Partner"
+        ],
+        "summary": "Find partner by external system (ERP) ID",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "externalId",
+            "description": "external ID (ERP. No) of partner to return",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Partner"
+            }
+          },
+          "404": {
+            "description": "partner not found"
+          },
+          "500": {
+            "description": "unhandled exception"
+          }
+        }
+      }
+    },
+    "/partner/externalFormatXml": {
+      "post": {
+        "tags": [
+          "Partner"
+        ],
+        "summary": "Add a new partner",
+        "consumes": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "partner in xml with inner structure as agreed (multiple formats supported)",
+            "schema": {
+              "type": "array",
+              "items": { }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "invalid xml supplied"
+          },
+          "409": {
+            "description": "partner already exists"
+          },
+          "500": {
+            "description": "unhandled exception"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Partner"
+        ],
+        "summary": "Update an existing partner",
+        "consumes": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "partner in xml with inner structure as agreed (multiple formats supported)",
+            "schema": {
+              "type": "array",
+              "items": { }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "invalid xml supplied"
+          },
+          "404": {
+            "description": "partner not found"
+          },
+          "500": {
+            "description": "unhandled exception"
+          }
+        }
+      }
+    },
+    "/partner": {
+      "post": {
+        "tags": [
+          "Partner"
+        ],
+        "summary": "Add a new partner",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "partner in specpage json format",
+            "schema": { }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "invalid json supplied"
+          },
+          "409": {
+            "description": "partner already exists"
+          },
+          "500": {
+            "description": "unhandled exception"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Partner"
+        ],
+        "summary": "Update an existing partner",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "partner in specpage json format",
+            "schema": { }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "invalid json supplied"
+          },
+          "404": {
+            "description": "partner not found"
+          },
+          "500": {
+            "description": "unhandled exception"
+          }
+        }
+      }
+    },
+    "/recipe/externalId/{externalId}": {
+      "get": {
+        "tags": [
+          "Recipe"
+        ],
+        "summary": "Find recipe by external system (ERP) ID",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "externalId",
+            "description": "external ID (ERP. No) of recipe to return",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Recipe"
+            }
+          },
+          "404": {
+            "description": "recipe not found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "500": {
+            "description": "unhandled exception",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/recipe/externalFormatXml": {
+      "post": {
+        "tags": [
+          "Recipe"
+        ],
+        "summary": "Add a new recipe",
+        "consumes": [
+          "application/xml"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "recipe data in xml with inner structure as agreed (multiple formats supported)",
+            "schema": {
+              "type": "array",
+              "items": { }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "recipe created",
+            "schema": {
+              "$ref": "#/definitions/ResponseWithObject"
+            }
+          },
+          "400": {
+            "description": "invalid xml supplied",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "409": {
+            "description": "recipe already exists",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "500": {
+            "description": "unhandled exception",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Recipe"
+        ],
+        "summary": "Update an existing recipe (creating new recipe possible if internal conditions fullfilled)",
+        "consumes": [
+          "application/xml"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "recipe data in xml with inner structure as agreed (multiple formats supported)",
+            "schema": {
+              "type": "array",
+              "items": { }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "recipe updated",
+            "schema": {
+              "$ref": "#/definitions/ResponseWithObject"
+            }
+          },
+          "201": {
+            "description": "recipe created",
+            "schema": {
+              "$ref": "#/definitions/ResponseWithObject"
+            }
+          },
+          "400": {
+            "description": "invalid xml supplied",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "404": {
+            "description": "recipe not found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "500": {
+            "description": "unhandled exception",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/recipe": {
+      "post": {
+        "tags": [
+          "Recipe"
+        ],
+        "summary": "Add a new recipe",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "recipe  in specpage json format",
+            "schema": { }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "recipe created",
+            "schema": {
+              "$ref": "#/definitions/ResponseWithObject"
+            }
+          },
+          "400": {
+            "description": "invalid xml supplied",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "409": {
+            "description": "recipe already exists",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "500": {
+            "description": "unhandled exception",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Recipe"
+        ],
+        "summary": "Update an existing recipe (creating new recipe possible if internal conditions fullfilled)",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "recipe  in specpage json format",
+            "schema": { }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "recipe updated",
+            "schema": {
+              "$ref": "#/definitions/ResponseWithObject"
+            }
+          },
+          "201": {
+            "description": "recipe created",
+            "schema": {
+              "$ref": "#/definitions/ResponseWithObject"
+            }
+          },
+          "400": {
+            "description": "invalid json supplied",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "404": {
+            "description": "recipe not found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "500": {
+            "description": "unhandled exception",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Component": {
+      "required": [
+        "erpNo"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "maxLength": 20,
+          "minLength": 0,
+          "type": "string"
+        },
+        "varietyId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "releaseId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "erpNo": {
+          "maxLength": 25,
+          "minLength": 0,
+          "type": "string"
+        },
+        "internalNo": {
+          "maxLength": 25,
+          "minLength": 0,
+          "type": "string"
+        },
+        "gtin": {
+          "maxLength": 14,
+          "minLength": 0,
+          "type": "string"
+        },
+        "position": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "amount": {
+          "format": "double",
+          "type": "number"
+        },
+        "amountUnitId": {
+          "type": "string"
+        },
+        "mixingSequence": {
+          "type": "string"
+        },
+        "weightIn": {
+          "format": "double",
+          "type": "number"
+        },
+        "weightInPercentage": {
+          "format": "double",
+          "type": "number"
+        },
+        "weightOut": {
+          "format": "double",
+          "type": "number"
+        },
+        "weightOutPercentage": {
+          "format": "double",
+          "type": "number"
+        },
+        "predefinedLossValue": {
+          "format": "double",
+          "type": "number"
+        },
+        "predefinedLossPercentage": {
+          "format": "double",
+          "type": "number"
+        }
+      }
+    },
+    "ControlStatusIdName": {
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/ControlStatusType"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "ControlStatusType": {
+      "format": "int32"
+      "enum": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "type": "integer"
+    },
+    "Criteria": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "typeId": {
+          "$ref": "#/definitions/CriteriaType"
+        },
+        "partnerId": {
+          "type": "string"
+        },
+        "partnerErpNo": {
+          "type": "string"
+        }
+      }
+    },
+    "CriteriaType": {
+      "format": "int32",
+      "enum": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "type": "integer"
+    },
+    "Description": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "varietyName": {
+          "type": "string"
+        },
+        "additionalName": {
+          "type": "string"
+        },
+        "additionalVarietyName": {
+          "type": "string"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "variantComment": {
+          "type": "string"
+        },
+        "lang": {
+          "type": "string"
+        }
+      }
+    },
+    "IdName": {
+      "required": [
+        "id"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "ItemDefinition": {
+      "required": [
+        "erpNo"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "maxLength": 20,
+          "minLength": 0,
+          "type": "string"
+        },
+        "varietyId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "releaseId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "erpNo": {
+          "maxLength": 25,
+          "minLength": 0,
+          "type": "string"
+        },
+        "internalNo": {
+          "maxLength": 25,
+          "minLength": 0,
+          "type": "string"
+        },
+        "gtin": {
+          "maxLength": 14,
+          "minLength": 0,
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/IdName"
+        },
+        "area": {
+          "$ref": "#/definitions/IdName"
+        },
+        "group": {
+          "$ref": "#/definitions/IdName"
+        },
+        "department": {
+          "$ref": "#/definitions/IdName"
+        },
+        "productionLine": {
+          "$ref": "#/definitions/IdName"
+        },
+        "basicAmount": {
+          "format": "double",
+          "type": "number"
+        },
+        "basicAmountUnitId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "kgPerBasicUnit": {
+          "format": "double",
+          "type": "number"
+        },
+        "bestBefore": {
+          "format": "double",
+          "type": "number"
+        },
+        "bestBeforeUnitId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "density": {
+          "format": "double",
+          "type": "number"
+        },
+        "densityUnitId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "priceUnitId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "descriptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Description"
+          }
+        },
+        "plants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Plant"
+          }
+        }
+      }
+    },
+    "ItemIdentification": {
+      "required": [
+        "erpNo"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "maxLength": 20,
+          "minLength": 0,
+          "type": "string"
+        },
+        "varietyId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "releaseId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "erpNo": {
+          "maxLength": 25,
+          "minLength": 0,
+          "type": "string"
+        },
+        "internalNo": {
+          "maxLength": 25,
+          "minLength": 0,
+          "type": "string"
+        },
+        "gtin": {
+          "maxLength": 14,
+          "minLength": 0,
+          "type": "string"
+        }
+      }
+    },
+    "MasterData": {
+      "required": [
+        "erpNo"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "maxLength": 20,
+          "minLength": 0,
+          "type": "string"
+        },
+        "varietyId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "releaseId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "erpNo": {
+          "maxLength": 25,
+          "minLength": 0,
+          "type": "string"
+        },
+        "internalNo": {
+          "maxLength": 25,
+          "minLength": 0,
+          "type": "string"
+        },
+        "gtin": {
+          "maxLength": 14,
+          "minLength": 0,
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/IdName"
+        },
+        "area": {
+          "$ref": "#/definitions/IdName"
+        },
+        "group": {
+          "$ref": "#/definitions/IdName"
+        },
+        "department": {
+          "$ref": "#/definitions/IdName"
+        },
+        "productionLine": {
+          "$ref": "#/definitions/IdName"
+        },
+        "basicAmount": {
+          "format": "double",
+          "type": "number"
+        },
+        "basicAmountUnitId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "kgPerBasicUnit": {
+          "format": "double",
+          "type": "number"
+        },
+        "bestBefore": {
+          "format": "double",
+          "type": "number"
+        },
+        "bestBeforeUnitId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "density": {
+          "format": "double",
+          "type": "number"
+        },
+        "densityUnitId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "priceUnitId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "descriptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Description"
+          }
+        },
+        "plants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Plant"
+          }
+        },
+        "prices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Price"
+          }
+        },
+        "criterias": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Criteria"
+          }
+        },
+        "partners": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MasterDataPartner"
+          }
+        },
+        "partnerErpNo": {
+          "type": "string"
+        },
+        "partnerId": {
+          "type": "string"
+        },
+        "partnerTypeId": {
+          "$ref": "#/definitions/PartnerType"
+        },
+        "status": {
+          "$ref": "#/definitions/Status"
+        }
+      }
+    },
+    "MasterDataPartner": {
+      "type": "object",
+      "properties": {
+        "masterDataErpNo": {
+          "maxLength": 25,
+          "minLength": 0,
+          "type": "string"
+        },
+        "partnerId": {
+          "maxLength": 20,
+          "minLength": 0,
+          "type": "string"
+        },
+        "releaseId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "partnerTypeId": {
+          "$ref": "#/definitions/PartnerType"
+        },
+        "partnerErpNo": {
+          "maxLength": 20,
+          "minLength": 0,
+          "type": "string"
+        },
+        "partnerMasterDataErpNo": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "supplierStatusId": {
+          "$ref": "#/definitions/SupplierStatus"
+        },
+        "descriptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PartnerMasterDataDescription"
+          }
+        },
+        "status": {
+          "$ref": "#/definitions/Status"
+        }
+      }
+    },
+    "Partner": {
+      "required": [
+        "erpNo",
+        "partnerTypeID"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "maxLength": 20,
+          "minLength": 0,
+          "type": "string"
+        },
+        "erpNo": {
+          "maxLength": 25,
+          "minLength": 0,
+          "type": "string"
+        },
+        "alternativeIdentifier": {
+          "maxLength": 20,
+          "minLength": 0,
+          "type": "string"
+        },
+        "partnerTypeID": {
+          "$ref": "#/definitions/PartnerType"
+        },
+        "descriptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PartnerDescription"
+          }
+        },
+        "isProducer": {
+          "type": "boolean"
+        },
+        "isReleased": {
+          "type": "boolean"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "street": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "streetNo": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "city": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "zip": {
+          "maxLength": 16,
+          "minLength": 0,
+          "type": "string"
+        },
+        "region": {
+          "maxLength": 5,
+          "minLength": 0,
+          "type": "string"
+        },
+        "country": {
+          "maxLength": 5,
+          "minLength": 0,
+          "type": "string"
+        },
+        "telephone": {
+          "maxLength": 30,
+          "minLength": 0,
+          "type": "string"
+        },
+        "fax": {
+          "maxLength": 30,
+          "minLength": 0,
+          "type": "string"
+        },
+        "postbox": {
+          "maxLength": 30,
+          "minLength": 0,
+          "type": "string"
+        },
+        "postboxZip": {
+          "maxLength": 16,
+          "minLength": 0,
+          "type": "string"
+        },
+        "web": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "mail": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "communicationLanguage": {
+          "maxLength": 2,
+          "minLength": 0,
+          "type": "string"
+        },
+        "gln": {
+          "maxLength": 20,
+          "minLength": 0,
+          "type": "string"
+        },
+        "plants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Plant"
+          }
+        },
+        "customs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PartnerCustom"
+          }
+        }
+      }
+    },
+    "PartnerCustom": {
+      "required": [
+        "lang",
+        "plant"
+      ],
+      "type": "object",
+      "properties": {
+        "cust1": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "cust2": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "cust3": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "cust4": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "cust5": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "cust6": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "cust7": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "cust8": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "currencyID": {
+          "maxLength": 3,
+          "minLength": 0,
+          "type": "string"
+        },
+        "lang": {
+          "maxLength": 2,
+          "minLength": 0,
+          "type": "string"
+        },
+        "plant": {
+          "$ref": "#/definitions/Plant"
+        }
+      }
+    },
+    "PartnerDescription": {
+      "required": [
+        "name"
+      ],
+      "type": "object",
+      "properties": {
+        "name": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 128,
+          "minLength": 0,
+          "type": "string"
+        },
+        "alias": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "column": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "lang": {
+          "maxLength": 2,
+          "minLength": 0,
+          "type": "string"
+        }
+      }
+    },
+    "PartnerMasterDataDescription": {
+      "required": [
+        "lang"
+      ],
+      "type": "object",
+      "properties": {
+        "name": {
+          "maxLength": 255,
+          "minLength": 0,
+          "type": "string"
+        },
+        "remark": {
+          "maxLength": 254,
+          "minLength": 0,
+          "type": "string"
+        },
+        "lang": {
+          "maxLength": 2,
+          "minLength": 0,
+          "type": "string"
+        }
+      }
+    },
+    "PartnerType": {
+      "format": "int32",
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "type": "integer"
+    },
+    "Plant": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "maxLength": 20,
+          "minLength": 0,
+          "type": "string"
+        },
+        "erpNo": {
+          "maxLength": 20,
+          "minLength": 0,
+          "type": "string"
+        }
+      }
+    },
+    "Price": {
+      "type": "object",
+      "properties": {
+        "partnerId": {
+          "type": "string"
+        },
+        "partnerErpNo": {
+          "maxLength": 20,
+          "minLength": 0,
+          "type": "string"
+        },
+        "price1": {
+          "format": "double",
+          "type": "number"
+        },
+        "datePrice1": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "price2": {
+          "format": "double",
+          "type": "number"
+        },
+        "datePrice2": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "price3": {
+          "format": "double",
+          "type": "number"
+        },
+        "datePrice3": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        }
+      }
+    },
+    "ProblemDetails": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "detail": {
+          "type": "string"
+        },
+        "instance": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": { }
+    },
+    "Recipe": {
+      "required": [
+        "erpNo"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "maxLength": 20,
+          "minLength": 0,
+          "type": "string"
+        },
+        "varietyId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "releaseId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "erpNo": {
+          "maxLength": 25,
+          "minLength": 0,
+          "type": "string"
+        },
+        "internalNo": {
+          "maxLength": 25,
+          "minLength": 0,
+          "type": "string"
+        },
+        "gtin": {
+          "maxLength": 14,
+          "minLength": 0,
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/IdName"
+        },
+        "area": {
+          "$ref": "#/definitions/IdName"
+        },
+        "group": {
+          "$ref": "#/definitions/IdName"
+        },
+        "department": {
+          "$ref": "#/definitions/IdName"
+        },
+        "productionLine": {
+          "$ref": "#/definitions/IdName"
+        },
+        "basicAmount": {
+          "format": "double",
+          "type": "number"
+        },
+        "basicAmountUnitId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "kgPerBasicUnit": {
+          "format": "double",
+          "type": "number"
+        },
+        "bestBefore": {
+          "format": "double",
+          "type": "number"
+        },
+        "bestBeforeUnitId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "density": {
+          "format": "double",
+          "type": "number"
+        },
+        "densityUnitId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "priceUnitId": {
+          "maxLength": 12,
+          "minLength": 0,
+          "type": "string"
+        },
+        "descriptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Description"
+          }
+        },
+        "plants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Plant"
+          }
+        },
+        "status": {
+          "$ref": "#/definitions/Status"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Component"
+          }
+        }
+      }
+    },
+    "ResponseWithObject": {
+      "type": "object",
+      "properties": {
+        "responseObject": {
+          "$ref": "#/definitions/ItemIdentification"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "Status": {
+      "type": "object",
+      "properties": {
+        "controlStatus": {
+          "$ref": "#/definitions/ControlStatusIdName"
+        },
+        "processingStatus": {
+          "$ref": "#/definitions/IdName"
+        },
+        "validFrom": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "validTo": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "invalidFrom": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "reSubmission": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "comment": {
+          "maxLength": 254,
+          "minLength": 0,
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 254,
+          "minLength": 0,
+          "type": "string"
+        }
+      }
+    },
+    "SupplierStatus": {
+      "format": "int32",
+      "enum": [
+        0,
+        1,
+        2
+      ],
+      "type": "integer"
+    }
+  }
+}

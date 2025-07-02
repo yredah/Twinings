@@ -1,0 +1,213 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Seeburger",
+    "description": "API for http-gw04.txx.seeburger.de",
+    "version": "0.0.0"
+  },
+  "host": "http-gw04.txx.seeburger.de",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/httpasync_swander": {
+      "post": {
+        "tags": [
+          "Httpasync_swander"
+        ],
+        "description": "Create",
+        "operationId": "create",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "K2SpecificationData",
+            "in": "body",
+            "description": "K2 Specification Data Required For Seeburger",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SendSpecData"
+            }
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "description": "filename",
+            "required": false,
+            "default": "K2Interface",
+            "type": "string",
+            "x-example": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "definitions": {
+    "SpecData": {
+      "description": "SpecData",
+      "required": [
+        "SpecDataFlat"
+      ],
+      "properties": {
+        "SpecDataFlat": {
+          "$ref": "#/definitions/SpecDataFlat",
+        },
+        "VarnishType": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VarnishType"
+          },        }
+      }
+    },
+    "SendSpecData": {
+      "description": "Model for SendSpecData",
+      "required": [
+        "error"
+      ],
+      "properties": {
+        "error": {
+          "type": "string",
+          "x-example": ""
+        },
+        "SpecDataFlat": {
+          "$ref": "#/definitions/SpecDataFlat",
+        },
+        "VarnishType": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VarnishType"
+          },
+        },
+      }
+    },
+    "SpecDataFlat": {
+      "description": "Model for SpecDataFlat",
+      "required": [
+        "BaseUOM"
+      ],
+      "properties": {
+        "BaseUOM": {
+          "type": "string",
+          "x-example": "REL"
+        },
+        "Bossed": {
+          "type": "string",
+          "x-example": "2"
+        },
+        "CommodityCode": {
+          "type": "string",
+          "x-example": "4811590000"
+        },
+        "Dimensions": {
+          "type": "string",
+          "x-example": "67x127x77.5"
+        },
+        "ManufacturingSite": {
+          "type": "string",
+          "x-example": "0100"
+        },
+        "MaterialCategory": {
+          "type": "string",
+          "x-example": "PAPER"
+        },
+        "MaterialStructure": {
+          "type": "string",
+          "x-example": "Arktika, GC1, 325gsm"
+        },
+        "MaxStoragePeriod": {
+          "type": "string",
+          "x-example": "12"
+        },
+        "OtherFinishes": {
+          "type": "string",
+          "x-example": "Gold Foil"
+        },
+        "PackagingTier": {
+          "type": "string",
+          "x-example": "Primary"
+        },
+        "PackagingType": {
+          "type": "string",
+          "x-example": "Envo (Paper PE)"
+        },
+        "PalletQty": {
+          "type": "string",
+          "x-example": "56"
+        },
+        "PalletType": {
+          "type": "string",
+          "x-example": "EURO (EP)"
+        },
+        "PMSubCategory": {
+          "type": "string",
+          "x-example": "C24 PAPER / PE ENVELOPES"
+        },
+        "SpecDescription": {
+          "type": "string",
+          "x-example": "Test"
+        },
+        "SpecialVarnish": {
+          "type": "string",
+          "x-example": "Spot UV Gloss"
+        },
+        "SpecPMId": {
+          "type": "string",
+          "x-example": "36"
+        },
+        "SupplierCode": {
+          "type": "string",
+          "x-example": "903643"
+        },
+        "SupplierSpec": {
+          "type": "string",
+          "x-example": "TIJ-BK117"
+        },
+        "WasteType": {
+          "type": "string",
+          "x-example": ""
+        },
+        "WasteWeight": {
+          "type": "string",
+          "x-example": ""
+        },
+        "Weight": {
+          "type": "string",
+          "x-example": "0.016000"
+        }
+      }
+    },
+    "VarnishType": {
+      "description": "Model for VarnishType",
+      "required": [
+        "VarnishType"
+      ],
+      "properties": {
+        "VarnishType": {
+          "type": "string",
+          "x-example": "X"
+        },
+        }
+      }
+    },
+  "securityDefinitions": {},
+  "security": [],
+  "tags": [
+    {
+      "name": "Httpasync_swander",
+      "description": "Operations about Httpasync_swander"
+    }
+  ]
+}
