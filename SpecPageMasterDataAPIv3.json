@@ -929,7 +929,7 @@
       }
     },
     "ControlStatusType": {
-      "format": "int32"
+      "format": "int32",
       "enum": [
         0,
         1,
